@@ -21,18 +21,21 @@ and the Eureka Service Discovery from the [Spring Cloud Netflix](https://github.
 
 ## Starting services locally without Docker
 
-Every microservice is a Spring Boot application and can be started locally using IDE ([Lombok](https://projectlombok.org/) plugin has to be set up) or `../mvnw spring-boot:run` command. For attaching the OpenTelemetry agent you can modify the command to '../mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-javaagent:../docker/opentelemetry-javaaagent.jar -Dotel.exporter.otlp.endpoint=http://localhost:4317 -Dotel.resource.attributes=service.name=<servicename>-petclinic" '
+Every microservice is a Spring Boot application and can be started locally using IDE ([Lombok](https://projectlombok.org/) plugin has to be set up) or `../mvnw spring-boot:run` command. For attaching the OpenTelemetry agent you can modify the command to '../mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-javaagent:../docker/opentelemetry-javaaagent.jar -Dotel.exporter.otlp.endpoint=http://localhost:4317 -Dotel.resource.attributes=service.name=servicename-petclinic" '
 
-Replace the <servicename> above with the service name when starting the application using the mvnw.
-Both Signoz and Jaeger listen for OTLP data in the same 4317 port. 
+Replace the 'servicename' above with the respective microservice name when starting the application using mvnw.
+The above assumes the tracing server is also run locally. Replace localhost with the IP address of machine where tracing server is running for non-local scenarios.
+Both Signoz and Jaeger listen for OTLP data in the 4317 port.
 
 You can refer to the respective documentations of Jaeger and Signoz. The simplest way to get started is running them as containers.
 
 ## Incase you wish to use Signoz
 Steps to install Signoz can be found here. https://signoz.io/docs/install/docker/
+Post install Signoz Clickhouse UI will be accessible at http://localhost:3301
 
 ## Incase you wish to use Jaeger
 Steps to install Jaeger can be found here. https://www.jaegertracing.io/docs/1.42/getting-started/
+Post install Jaeger UI will be accessible at http://localhost:16686
 
 
 
@@ -43,7 +46,7 @@ If everything goes well, you can access the following services at given location
 * Config Server - http://localhost:8888
 * AngularJS frontend (API Gateway) - http://localhost:8080
 * Customers, Vets and Visits Services - random port, check Eureka Dashboard 
-* Tracing Server (Jaeger or Signoz) - http://localhost:3301 for Signoz http://localhost:16686 for Jaeger UI.
+* Tracing Server (Jaeger or Signoz) - http://localhost:3301 for Signoz | http://localhost:16686 for Jaeger UI.
 * Admin Server (Spring Boot Admin) - http://localhost:9090
 * Grafana Dashboards - http://localhost:3000
 * Prometheus - http://localhost:9091
@@ -147,6 +150,8 @@ You will find the JSON configuration file here: [docker/grafana/dashboards/grafa
 * You may create your own dashboard or import the [Micrometer/SpringBoot dashboard](https://grafana.com/dashboards/4701) via the Import Dashboard menu item.
 The id for this dashboard is `4701`.
 
+Also checking feasibility to use Tempo for tracing as it integrates into Grafana.
+
 
 ### Custom metrics
 Spring Boot registers a lot number of core metrics: JVM, CPU, Tomcat, Logback... 
@@ -198,4 +203,4 @@ For pull requests, editor preferences are available in the [editor config](.edit
 
 [Configuration repository]: https://github.com/spring-petclinic/spring-petclinic-microservices-config
 [Spring Boot Actuator Production Ready Metrics]: https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-metrics.html
->>>>>>> master
+
