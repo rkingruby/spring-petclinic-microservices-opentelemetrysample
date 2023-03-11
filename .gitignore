@@ -1,0 +1,30 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Jenv
+.java-version
+
+# Eclipse
+.settings/
+.classpath
+.project
+
+# IntelliJ IDEA
+.idea
+*.iml
+
+# Visual Studio Code
+.factorypath
+
+# Branch switching
+generated/
+
+# Misc
+dockercompose-original.yml
+docker/agent.config
+docker/DockerFileOriginal
+docker/OpentelemetryDockerfile
+opentelemetry-agent/
+agent/
+

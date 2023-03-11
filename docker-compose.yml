@@ -1,0 +1,119 @@
+version: '2'
+
+
+services:
+  config-server:
+    image: springcommunity/spring-petclinic-config-server
+    container_name: config-server
+    mem_limit: 512M
+    ports:
+     - 8888:8888
+
+  discovery-server:
+    image: springcommunity/spring-petclinic-discovery-server
+    container_name: discovery-server
+    mem_limit: 512M
+    depends_on:
+      - config-server
+    entrypoint: ["./dockerize","-wait=tcp://config-server:8888","-timeout=80s","--","java", "-javaagent:/opentelemetry-agent/opentelemetry-javaagent.jar", "-Dotel.exporter.otlp.endpoint=http://172.17.0.1:4317", "-Dotel.resource.attributes=service.name=discovery-server,service.instance.name=discovery-server-1,service.namespace=petclinic", "org.springframework.boot.loader.JarLauncher"]
+
+    ports:
+     - 8761:8761
+    volumes:
+      - /home/tamilkumaran/Docker/spring-petclinic-microservices/opentelemetry-agent:/opentelemetry-agent
+
+  customers-service:
+    image: springcommunity/spring-petclinic-customers-service
+    container_name: customers-service
+    mem_limit: 512M
+    depends_on:
+     - config-server
+     - discovery-server
+    entrypoint: ["./dockerize","-wait=tcp://config-server:8888","-timeout=80s","--","java", "-javaagent:/opentelemetry-agent/opentelemetry-javaagent.jar",  "-Dotel.exporter.otlp.endpoint=http://172.17.0.1:4317", "-Dotel.resource.attributes=service.name=customers-service,service.instance.name=customers-service-1,service.namespace=petclinic", "org.springframework.boot.loader.JarLauncher"]
+    ports:
+    - 8081:8081
+    volumes:
+      - /home/tamilkumaran/Docker/spring-petclinic-microservices/opentelemetry-agent:/opentelemetry-agent
+
+
+  visits-service:
+    image: springcommunity/spring-petclinic-visits-service
+    container_name: visits-service
+    mem_limit: 512M
+    depends_on:
+     - config-server
+     - discovery-server
+    entrypoint: ["./dockerize","-wait=tcp://config-server:8888","-timeout=80s","--","java", "-javaagent:/opentelemetry-agent/opentelemetry-javaagent.jar", "-Dotel.exporter.otlp.endpoint=http://172.17.0.1:4317", "-Dotel.resource.attributes=service.name=visits-service,service.instance.name=visits-service-1,service.namespace=petclinic", "org.springframework.boot.loader.JarLauncher"]
+    ports:
+     - 8082:8082
+    volumes:
+      - /home/tamilkumaran/Docker/spring-petclinic-microservices/opentelemetry-agent:/opentelemetry-agent
+
+
+  vets-service:
+    image: springcommunity/spring-petclinic-vets-service
+    container_name: vets-service
+    mem_limit: 512M
+    depends_on:
+     - config-server
+     - discovery-server
+    entrypoint: ["./dockerize","-wait=tcp://config-server:8888","-timeout=80s","--","java", "-javaagent:/opentelemetry-agent/opentelemetry-javaagent.jar", "-Dotel.exporter.otlp.endpoint=http://172.17.0.1:4317", "-Dotel.resource.attributes=service.name=vets-service,service.instance.name=vets-service-1,service.namespace=petclinic", "org.springframework.boot.loader.JarLauncher"]
+    ports:
+     - 8083:8083
+    volumes:
+      - /home/tamilkumaran/Docker/spring-petclinic-microservices/opentelemetry-agent:/opentelemetry-agent
+
+
+  api-gateway:
+    image: springcommunity/spring-petclinic-api-gateway
+    container_name: api-gateway
+    mem_limit: 512M
+    depends_on:
+     - config-server
+     - discovery-server
+    entrypoint: ["./dockerize","-wait=tcp://config-server:8888","-timeout=80s","--","java", "-javaagent:/opentelemetry-agent/opentelemetry-javaagent.jar", "-Dotel.exporter.otlp.endpoint=http://172.17.0.1:4317", "-Dotel.resource.attributes=service.name=api-gateway,service.instance.name=api-gateway-1,service.namespace=petclinic", "org.springframework.boot.loader.JarLauncher"]
+    ports:
+     - 8080:8080
+    volumes:
+      - /home/tamilkumaran/Docker/spring-petclinic-microservices/opentelemetry-agent:/opentelemetry-agent
+
+  # tracing-server:
+  #   image: openzipkin/zipkin
+  #   container_name: tracing-server
+  #   mem_limit: 512M
+  #   environment:
+  #   - JAVA_OPTS=-XX:+UnlockExperimentalVMOptions -Djava.security.egd=file:/dev/./urandom
+  #   ports:
+  #    - 9411:9411
+
+  admin-server:
+    image: springcommunity/spring-petclinic-admin-server
+    container_name: admin-server
+    mem_limit: 512M
+    depends_on:
+     - config-server
+     - discovery-server
+    entrypoint: ["./dockerize","-wait=tcp://config-server:8888","-timeout=80s","--","java", "-javaagent:/opentelemetry-agent/opentelemetry-javaagent.jar", "-Dotel.exporter.otlp.endpoint=http://172.17.0.1:4317", "-Dotel.resource.attributes=service.name=admin-server,service.instance.name=admin-server-1,service.namespace=petclinic", "org.springframework.boot.loader.JarLauncher"]
+    ports:
+     - 9090:9090
+    volumes:
+      - /home/tamilkumaran/Docker/spring-petclinic-microservices/opentelemetry-agent:/opentelemetry-agent
+
+
+  ## Grafana / Prometheus  ../mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-javaagent:/home/tamilkumaran/Docker/spring-petclinic-microservices/agent/opentelemetry-javaagent.jar -Dotel.traces.exporter=zipkin -Dotel.exporter.zipkin.endpoint=http://tracing-server:9411/api/v2/spans -Dotel.resource.attributes=service.name=api-gateway,service.instance.name=api-gateway-1,service.namespace=petclinic"
+
+
+
+  # grafana-server:
+  #   build: ./docker/grafana
+  #   container_name: grafana-server
+  #   mem_limit: 256M
+  #   ports:
+  #   - 3000:3000
+
+  # prometheus-server:
+  #   build: ./docker/prometheus
+  #   container_name: prometheus-server
+  #   mem_limit: 256M
+  #   ports:
+  #   - 9091:9090
