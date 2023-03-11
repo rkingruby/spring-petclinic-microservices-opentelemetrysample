@@ -94,10 +94,6 @@ You can then access petclinic here: http://localhost:8080/
 ![Spring Petclinic Microservices architecture](docs/microservices-architecture-diagram.jpg)
 
 
-## In case you find a bug/suggested improvement for Spring Petclinic Microservices
-
-Our issue tracker is available here: https://github.com/spring-petclinic/spring-petclinic-microservices/issues
-
 ## Database configuration
 
 In its default configuration, Petclinic uses an in-memory database (HSQLDB) which gets populated at startup with data.
@@ -192,13 +188,6 @@ This [spring-petclinic-microservices](https://github.com/spring-petclinic/spring
 hosted in a special GitHub org: [spring-petclinic](https://github.com/spring-petclinic).
 If you have a special interest in a different technology stack
 that could be used to implement the Pet Clinic then please join the community there.
-
-
-# Contributing
-
-The [issue tracker](https://github.com/spring-petclinic/spring-petclinic-microservices/issues) is the preferred channel for bug reports, features requests and submitting pull requests.
-
-For pull requests, editor preferences are available in the [editor config](.editorconfig) for easy use in common text editors. Read more and download plugins at <http://editorconfig.org>.
 
 
 [Configuration repository]: https://github.com/spring-petclinic/spring-petclinic-microservices-config
