@@ -37,6 +37,7 @@ Post install Signoz Clickhouse UI will be accessible at http://localhost:3301
 Steps to install Jaeger can be found here. https://www.jaegertracing.io/docs/1.42/getting-started/
 Post install Jaeger UI will be accessible at http://localhost:16686
 
+## Supporting services to be started first before others
 
 Please note that supporting services (Config and Discovery Server) must be started before any other application (Customers, Vets, Visits and API).
 Startup of Tracing server, Admin server, Grafana and Prometheus is optional.
