@@ -19,3 +19,12 @@ target/
 
 # Branch switching
 generated/
+
+# Misc
+dockercompose-original.yml
+docker/agent.config
+docker/DockerFileOriginal
+docker/OpentelemetryDockerfile
+opentelemetry-agent/
+agent/
+

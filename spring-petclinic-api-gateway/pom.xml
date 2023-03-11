@@ -86,6 +86,7 @@
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-zipkin</artifactId>
         </dependency>
+       
 
         <!-- Webjars -->
         <dependency>

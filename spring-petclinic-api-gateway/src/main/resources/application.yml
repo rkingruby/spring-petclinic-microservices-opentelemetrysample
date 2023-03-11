@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: development
   application:
     name: api-gateway
   config:
@@ -24,8 +26,6 @@ spring:
             - Path=/api/customer/**
           filters:
             - StripPrefix=2
-
-
 
 ---
 spring:
