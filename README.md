@@ -33,6 +33,9 @@ You can refer to the respective documentations of Jaeger and Signoz. The simples
 Steps to install Signoz can be found here. https://signoz.io/docs/install/docker/
 Post install Signoz Clickhouse UI will be accessible at http://localhost:3301
 
+*NOTE: Signoz comes with a sample Hotrod application and Locust load script, so that even on first visit to the Signoz UI you will see list of services and traces, this is good for getting acquainted. However you can remove the sample application.*
+https://signoz.io/docs/operate/docker-standalone/#remove-the-sample-application-from-signoz-dashboard
+
 ## Incase you wish to use Jaeger
 Steps to install Jaeger can be found here. https://www.jaegertracing.io/docs/1.42/getting-started/
 Post install Jaeger UI will be accessible at http://localhost:16686
