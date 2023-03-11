@@ -20,7 +20,7 @@ services:
     ports:
      - 8761:8761
     volumes:
-      - /home/tamilkumaran/Docker/spring-petclinic-microservices/opentelemetry-agent:/opentelemetry-agent
+      - ./opentelemetry-agent:/opentelemetry-agent
 
   customers-service:
     image: springcommunity/spring-petclinic-customers-service
@@ -33,7 +33,7 @@ services:
     ports:
     - 8081:8081
     volumes:
-      - /home/tamilkumaran/Docker/spring-petclinic-microservices/opentelemetry-agent:/opentelemetry-agent
+      - ./opentelemetry-agent:/opentelemetry-agent
 
 
   visits-service:
@@ -47,7 +47,7 @@ services:
     ports:
      - 8082:8082
     volumes:
-      - /home/tamilkumaran/Docker/spring-petclinic-microservices/opentelemetry-agent:/opentelemetry-agent
+      - ./opentelemetry-agent:/opentelemetry-agent
 
 
   vets-service:
@@ -61,7 +61,7 @@ services:
     ports:
      - 8083:8083
     volumes:
-      - /home/tamilkumaran/Docker/spring-petclinic-microservices/opentelemetry-agent:/opentelemetry-agent
+      - ./opentelemetry-agent:/opentelemetry-agent
 
 
   api-gateway:
@@ -75,16 +75,7 @@ services:
     ports:
      - 8080:8080
     volumes:
-      - /home/tamilkumaran/Docker/spring-petclinic-microservices/opentelemetry-agent:/opentelemetry-agent
-
-  # tracing-server:
-  #   image: openzipkin/zipkin
-  #   container_name: tracing-server
-  #   mem_limit: 512M
-  #   environment:
-  #   - JAVA_OPTS=-XX:+UnlockExperimentalVMOptions -Djava.security.egd=file:/dev/./urandom
-  #   ports:
-  #    - 9411:9411
+      - ./opentelemetry-agent:/opentelemetry-agent
 
   admin-server:
     image: springcommunity/spring-petclinic-admin-server
@@ -97,23 +88,23 @@ services:
     ports:
      - 9090:9090
     volumes:
-      - /home/tamilkumaran/Docker/spring-petclinic-microservices/opentelemetry-agent:/opentelemetry-agent
+      - ./opentelemetry-agent:/opentelemetry-agent
 
 
-  ## Grafana / Prometheus  ../mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-javaagent:/home/tamilkumaran/Docker/spring-petclinic-microservices/agent/opentelemetry-javaagent.jar -Dotel.traces.exporter=zipkin -Dotel.exporter.zipkin.endpoint=http://tracing-server:9411/api/v2/spans -Dotel.resource.attributes=service.name=api-gateway,service.instance.name=api-gateway-1,service.namespace=petclinic"
+  ## Grafana / Prometheus  
 
 
 
   # grafana-server:
-  #   build: ./docker/grafana
-  #   container_name: grafana-server
-  #   mem_limit: 256M
-  #   ports:
-  #   - 3000:3000
+      build: ./docker/grafana
+      container_name: grafana-server
+      mem_limit: 256M
+      ports:
+     - 3000:3000
 
   # prometheus-server:
-  #   build: ./docker/prometheus
-  #   container_name: prometheus-server
-  #   mem_limit: 256M
-  #   ports:
-  #   - 9091:9090
+      build: ./docker/prometheus
+      container_name: prometheus-server
+      mem_limit: 256M
+      ports:
+      - 9091:9090
