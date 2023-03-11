@@ -31,6 +31,7 @@ You can refer to the respective documentations of Jaeger and Signoz. The simples
 
 ## Incase you wish to use Signoz
 Steps to install Signoz can be found here. https://signoz.io/docs/install/docker/
+
 Post install Signoz Clickhouse UI will be accessible at http://localhost:3301
 
 ![Signoz UI](docs/signozui.png)
@@ -40,6 +41,7 @@ https://signoz.io/docs/operate/docker-standalone/#remove-the-sample-application-
 
 ## Incase you wish to use Jaeger
 Steps to install Jaeger can be found here. https://www.jaegertracing.io/docs/1.42/getting-started/
+
 Post install Jaeger UI will be accessible at http://localhost:16686
 
 ![Jaeger UI](docs/jaegerui.png)
