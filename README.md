@@ -1,26 +1,49 @@
-<<<<<<< HEAD
-# spring-petclinic-microservices-opentelemetrysample
-Modifying the Spring Microservices Petclinic Application to use OpenTelemetry Agent auto instrumentation and either Signoz/Jaeger as tracing backend. Both Signoz and Jaeger are not included and are meant to be downloaded separately and configurations are simply straight forward, instructions below.
-=======
-# Distributed version of the Spring PetClinic Sample Application built with Spring Cloud 
 
-[![Build Status](https://github.com/spring-petclinic/spring-petclinic-microservices/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-petclinic/spring-petclinic-microservices/actions/workflows/maven-build.yml)
+# spring-petclinic-microservices-opentelemetrysample
+Modifying the Spring Microservices Petclinic Application to use OpenTelemetry Agent auto instrumentation and either Signoz/Jaeger as tracing backend. Both Signoz and Jaeger are not included here and are meant to be downloaded separately and the configurations are straight forward, instructions below.
+
+Looking to add Grafana Tempo to the stack in future as tracing backend as it is compatible with Grafana.
+
+All thanks and credits to the original Spring Microservices Petclinic creators. Most of the documentation is borrowed from that. I have only added the OpenTelemetry agent to demonstrate it's ease of use and instrumentation in microservices monitoring.
+
+For the latest updates and version of the agent, please visit https://opentelemetry.io/docs/instrumentation/java/automatic/
+
+
+=======
+# Derived from the Distributed version of the Spring PetClinic Sample Application built with Spring Cloud 
+
+
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-This microservices branch was initially derived from [AngularJS version](https://github.com/spring-petclinic/spring-petclinic-angular1) to demonstrate how to split sample Spring application into [microservices](http://www.martinfowler.com/articles/microservices.html).
+The original microservices version of Spring Petclinic was initially derived from [AngularJS version](https://github.com/spring-petclinic/spring-petclinic-angular1) to demonstrate how to split sample Spring application into [microservices](http://www.martinfowler.com/articles/microservices.html).
 To achieve that goal, we use Spring Cloud Gateway, Spring Cloud Circuit Breaker, Spring Cloud Config, Micrometer Tracing, Resilience4j, Open Telemetry 
 and the Eureka Service Discovery from the [Spring Cloud Netflix](https://github.com/spring-cloud/spring-cloud-netflix) technology stack.
 
 ## Starting services locally without Docker
 
-Every microservice is a Spring Boot application and can be started locally using IDE ([Lombok](https://projectlombok.org/) plugin has to be set up) or `../mvnw spring-boot:run` command. Please note that supporting services (Config and Discovery Server) must be started before any other application (Customers, Vets, Visits and API).
+Every microservice is a Spring Boot application and can be started locally using IDE ([Lombok](https://projectlombok.org/) plugin has to be set up) or `../mvnw spring-boot:run` command. For attaching the OpenTelemetry agent you can modify the command to '../mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-javaagent:../docker/opentelemetry-javaaagent.jar -Dotel.exporter.otlp.endpoint=http://localhost:4317 -Dotel.resource.attributes=service.name=<servicename>-petclinic" '
+
+Replace the <servicename> above with the service name when starting the application using the mvnw.
+Both Signoz and Jaeger listen for OTLP data in the same 4317 port. 
+
+You can refer to the respective documentations of Jaeger and Signoz. The simplest way to get started is running them as containers.
+
+## Incase you wish to use Signoz
+Steps to install Signoz can be found here. https://signoz.io/docs/install/docker/
+
+## Incase you wish to use Jaeger
+Steps to install Jaeger can be found here. https://www.jaegertracing.io/docs/1.42/getting-started/
+
+
+
+Please note that supporting services (Config and Discovery Server) must be started before any other application (Customers, Vets, Visits and API).
 Startup of Tracing server, Admin server, Grafana and Prometheus is optional.
 If everything goes well, you can access the following services at given location:
 * Discovery Server - http://localhost:8761
 * Config Server - http://localhost:8888
 * AngularJS frontend (API Gateway) - http://localhost:8080
 * Customers, Vets and Visits Services - random port, check Eureka Dashboard 
-* Tracing Server (Zipkin) - http://localhost:9411/zipkin/ (we use [openzipkin](https://github.com/openzipkin/zipkin/tree/master/zipkin-server))
+* Tracing Server (Jaeger or Signoz) - http://localhost:3301 for Signoz http://localhost:16686 for Jaeger UI.
 * Admin Server (Spring Boot Admin) - http://localhost:9090
 * Grafana Dashboards - http://localhost:3000
 * Prometheus - http://localhost:9091
@@ -32,7 +55,11 @@ You can tell Config Server to use your local Git repository by using `native` Sp
 ## Starting services locally with docker-compose
 In order to start entire infrastructure using Docker, you have to build images by executing `./mvnw clean install -P buildDocker` 
 from a project root. Once images are ready, you can start them with a single command
-`docker-compose up`. Containers startup order is coordinated with [`dockerize` script](https://github.com/jwilder/dockerize). 
+`docker-compose up`. 
+
+The Dockerfile is updated to copy the OTEL agent inside each container during the above buildDocker profile. The agent jar attachment to the application is taken care of in the docker-compose.yml through specifying the java agent in the entrypoint. Again the default port for sending the OTLP data to the tracing server is set as 4317.
+
+Containers startup order is coordinated with [`dockerize` script](https://github.com/jwilder/dockerize). 
 After starting services, it takes a while for API Gateway to be in sync with service registry,
 so don't be scared of initial Spring Cloud Gateway timeouts. You can track services availability using Eureka dashboard
 available by default at http://localhost:8761.
@@ -119,6 +146,7 @@ A JMeter load testing script is available to stress the application and generate
 You will find the JSON configuration file here: [docker/grafana/dashboards/grafana-petclinic-dashboard.json]().
 * You may create your own dashboard or import the [Micrometer/SpringBoot dashboard](https://grafana.com/dashboards/4701) via the Import Dashboard menu item.
 The id for this dashboard is `4701`.
+
 
 ### Custom metrics
 Spring Boot registers a lot number of core metrics: JVM, CPU, Tomcat, Logback... 
