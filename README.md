@@ -4,9 +4,9 @@ Modifying the Spring Microservices Petclinic Application to use OpenTelemetry Ag
 
 Looking to add Grafana Tempo to the stack in future as tracing backend as it integrates with Grafana.
 
-All thanks and credits to the original Spring Microservices Petclinic creators. Most of the documentation is borrowed from that. I have only added the OpenTelemetry agent to demonstrate it's ease of use and instrumentation in microservices monitoring.
+All thanks and credits to the original Spring Microservices Petclinic creators. Most of the documentation is borrowed from that. I have only added the OpenTelemetry agent v1.23 to demonstrate it's ease of use and instrumentation in microservices monitoring. The jar is placed in the docker directory.
 
-For the latest updates and version of the agent, please visit https://opentelemetry.io/docs/instrumentation/java/automatic/
+For more info and latest version of the agent, please visit https://opentelemetry.io/docs/instrumentation/java/automatic/
 
 
 =======
@@ -21,9 +21,9 @@ and the Eureka Service Discovery from the [Spring Cloud Netflix](https://github.
 
 ## Starting services locally without Docker
 
-Every microservice is a Spring Boot application and can be started locally using IDE ([Lombok](https://projectlombok.org/) plugin has to be set up) or `../mvnw spring-boot:run` command. For attaching the OpenTelemetry agent you can modify the command to '../mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-javaagent:../docker/opentelemetry-javaaagent.jar -Dotel.exporter.otlp.endpoint=http://localhost:4317 -Dotel.resource.attributes=service.name=servicename-petclinic" '
+Every microservice is a Spring Boot application and can be started locally using IDE ([Lombok](https://projectlombok.org/) plugin has to be set up) or `../mvnw spring-boot:run` command. For attaching the OpenTelemetry agent you can modify the command to `../mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-javaagent:../docker/opentelemetry-javaaagent.jar -Dotel.exporter.otlp.endpoint=http://localhost:4317 -Dotel.resource.attributes=service.name=servicename-petclinic"`
 
-Replace the 'servicename' above with the respective microservice name when starting the application using mvnw.
+Replace the `servicename` above with the respective microservice name when starting the application.
 The above assumes the tracing server is also run locally. Replace localhost with the IP address of machine where tracing server is running for non-local scenarios.
 Both Signoz and Jaeger listen for OTLP data in the 4317 port.
 
@@ -36,7 +36,6 @@ Post install Signoz Clickhouse UI will be accessible at http://localhost:3301
 ## Incase you wish to use Jaeger
 Steps to install Jaeger can be found here. https://www.jaegertracing.io/docs/1.42/getting-started/
 Post install Jaeger UI will be accessible at http://localhost:16686
-
 
 
 Please note that supporting services (Config and Discovery Server) must be started before any other application (Customers, Vets, Visits and API).
@@ -60,7 +59,7 @@ In order to start entire infrastructure using Docker, you have to build images b
 from a project root. Once images are ready, you can start them with a single command
 `docker-compose up`. 
 
-The Dockerfile is updated to copy the OTEL agent inside each container during the above buildDocker profile. The agent jar attachment to the application is taken care of in the docker-compose.yml through specifying the java agent in the entrypoint. Again the default port for sending the OTLP data to the tracing server is set as 4317.
+The Dockerfile is updated to copy the OTEL agent jar inside each container during the buildDocker action. The agent jar attachment to the application is taken care of in the docker-compose.yml through specifying the java agent in entrypoint. Again the default port for sending the OTLP data to the tracing server is set as 4317. 
 
 Containers startup order is coordinated with [`dockerize` script](https://github.com/jwilder/dockerize). 
 After starting services, it takes a while for API Gateway to be in sync with service registry,
