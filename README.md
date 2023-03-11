@@ -2,7 +2,7 @@
 # spring-petclinic-microservices-opentelemetrysample
 Modifying the Spring Microservices Petclinic Application to use OpenTelemetry Agent auto instrumentation and either Signoz/Jaeger as tracing backend. Both Signoz and Jaeger are not included here and are meant to be downloaded separately and the configurations are straight forward, instructions below.
 
-Looking to add Grafana Tempo to the stack in future as tracing backend as it is compatible with Grafana.
+Looking to add Grafana Tempo to the stack in future as tracing backend as it integrates with Grafana.
 
 All thanks and credits to the original Spring Microservices Petclinic creators. Most of the documentation is borrowed from that. I have only added the OpenTelemetry agent to demonstrate it's ease of use and instrumentation in microservices monitoring.
 
